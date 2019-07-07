@@ -34,12 +34,18 @@ FORMS += \
         mainwindow.ui
 
 
-
-win32:LIBS += -L$$PWD/../lib/ -lplcQtLib -lws2_32
-else:unix:!macx: LIBS += -L$$PWD/../lib/ -lplcQtLib
-
+#windows mingw
+#LIBS += -L$$PWD/../lib/windows/ -lplcQtLib -lws2_32
+#PRE_TARGETDEPS += $$PWD/../lib/windows/libplcQtLib.a
+#android
+LIBS += -L$$PWD/../lib/android/ -lplcQtLib
+PRE_TARGETDEPS += $$PWD/../lib/android/libplcQtLib.a
+#RaszberyPI
+#LIBS += -L$$PWD/../lib/RPI/ -lplcQtLib
+#PRE_TARGETDEPS += $$PWD/../lib/RPI/libplcQtLib.a
+#linux86
+#LIBS += -L$$PWD/../lib/linux/ -lplcQtLib
+#PRE_TARGETDEPS += $$PWD/../lib/linux/libplcQtLib.a
 INCLUDEPATH += $$PWD/../lib
 DEPENDPATH += $$PWD/../lib
-
-PRE_TARGETDEPS += $$PWD/../lib/libplcQtLib.a
 

@@ -16,12 +16,11 @@ class MainWindow : public QMainWindow
     #pragma pack(push, 1)
     #endif
     struct{
-      PlcBYTE bit1:1,bit2:1,bit3:1,bit4:1,bit5:1,bit6:1,bit7:1,bit8:1;
-      PlcBYTE bit9:1,bit10:1,bit11:1,bit12:1,bit13:1,bit14:1,bit15:1,bit16:1;
-      PlcWORD dana;
-      PlcBYTE dana2;
-      PlcBYTE free;
-      PlcDWORD b1;
+      PlcBYTE bit1:1,bit2:1,bit3:1,bit4:1,bit5:1,bit6:1,bit7:1,bit8:1,:8;
+      PlcWORD _PLCword;
+      PlcBYTE _PLCbyte;
+      PlcBYTE notUse;
+      PlcDWORD _doubleWord;
     }
     #if defined(__GNUC__)
     __attribute__((packed))
@@ -39,10 +38,16 @@ public:
 private slots:
     void readedData();
     void connected(bool);
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
-    void on_pushButton_4_clicked();
+    void on_push_DBD_clicked();
+    void on_push_dbw_clicked();
+    void on_push_DBB_clicked();
+
+    void on_button_bit1_Reset_clicked();
+    void on_button_Bit2_Reset_clicked();
+    void on_button_bit1_Set_clicked();
+    void on_button_bit2_Set_clicked();
+    void on_button_bit3_pressed();
+    void on_button_bit3_released();
 
 private:
     Ui::MainWindow *ui;

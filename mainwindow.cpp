@@ -6,12 +6,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    plc=new PlcQtLib("192.168.127.188",30,10,(unsigned char*)&db);
+    plc=new PlcQtLib("192.168.0.10",1,sizeof(db),(unsigned char*)&db,2,0,0);
     connect(plc,SIGNAL(dataReady()),this,SLOT(readedData()));
     connect(plc,SIGNAL(finished()),plc,SLOT(start()));
     connect(plc,SIGNAL(connected(bool)),this,SLOT(connected(bool)));
     plc->start();
-    qDebug()<<sizeof(db);
 }
 
 MainWindow::~MainWindow()
@@ -23,50 +22,63 @@ MainWindow::~MainWindow()
 
 void MainWindow::readedData()
 {
-    ui->lineEdit->setText(QString::number(PlcWORDtoInt(db.dana)));
-    ui->lineEdit_2->setText(QString::number(db.dana2));
-    ui->lineEdit_4->setText(QString::number(PlcDWORDtoInt(db.b1)));
-    ui->radioButton->setChecked(db.bit1);
-    ui->radioButton_2->setChecked(db.bit2);
-    ui->radioButton_3->setChecked(db.bit3);
-    ui->radioButton_4->setChecked(db.bit4);
-    ui->radioButton_5->setChecked(db.bit5);
-    ui->radioButton_6->setChecked(db.bit6);
-    ui->radioButton_7->setChecked(db.bit7);
-    ui->radioButton_8->setChecked(db.bit8);
-    ui->radioButton_9->setChecked(db.bit9);
-    ui->radioButton_10->setChecked(db.bit10);
-    ui->radioButton_11->setChecked(db.bit11);
-    ui->radioButton_12->setChecked(db.bit12);
-    ui->radioButton_13->setChecked(db.bit13);
-    ui->radioButton_14->setChecked(db.bit14);
-    ui->radioButton_15->setChecked(db.bit15);
-    ui->radioButton_16->setChecked(db.bit16);
+    ui->lab_DBB->setText(QString::number(db._PLCbyte));
+    ui->lab_DBW->setText(QString::number(PlcWORDtoInt(db._PLCword)));
+    ui->lab_DBD->setText(QString::number(PlcDWORDtoInt(db._doubleWord)));
+    ui->checkBox->setChecked(db.bit1);
+    ui->checkBox_2->setChecked(db.bit2);
+    ui->checkBox_3->setChecked(db.bit3);
 }
 
 void MainWindow::connected(bool b)
 {
     ui->centralWidget->setEnabled(b);
+    qDebug()<<"Połączono "<<b;
+}
+void MainWindow::on_button_bit1_Set_clicked(){
+    plc->setBit(0,0);
+}
+void MainWindow::on_button_bit1_Reset_clicked(){
+    plc->clearBit(0,0);
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    plc->writeWord(2,5000);
+void MainWindow::on_button_bit2_Set_clicked(){
+     plc->setBit(0,1);
+}
+void MainWindow::on_button_Bit2_Reset_clicked(){
+    plc->clearBit(0,1);
+}
+void MainWindow::on_button_bit3_pressed(){
+    plc->setBit(0,2);
 }
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    plc->writeByte(4,33);
+void MainWindow::on_button_bit3_released(){
+    plc->clearBit(0,2);
+}
+void MainWindow::on_push_DBB_clicked(){
+    static int val = 0;
+    val+=10;
+    plc->writeByte(4,val);
+}
+void MainWindow::on_push_dbw_clicked(){
+    static int val = 0;
+    val+=100;
+    plc->writeWord(2,val);
+}
+void MainWindow::on_push_DBD_clicked(){
+    static int val = 0;
+    val+=1000;
+    plc->writeDword(6,val);
 }
 
-void MainWindow::on_pushButton_3_clicked()
-{
-    int nr=ui->lineEdit_3->text().toInt()-1;
 
-    plc->setBit((nr)/8,(nr)%8);
-}
 
-void MainWindow::on_pushButton_4_clicked()
-{
-    plc->writeDword(6,3333);
-}
+
+
+
+
+
+
+
+
+
